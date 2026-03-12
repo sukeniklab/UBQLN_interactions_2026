@@ -1,0 +1,12 @@
+elm_identifier,start,stop,is_annotated,is_phiblastmatch,is_filtered,phiblast,topodomfilter,taxonfilter,structure
+DEG_CRBN_cyclicCter_1,52,55,False,False,False,False,False,False,False
+DOC_WW_Pin1_4,16,21,False,False,False,False,False,False,False
+LIG_BIR_II_1,1,4,False,False,False,False,False,False,False
+LIG_BRCT_BRCA1_1,38,42,False,False,False,False,False,False,False
+LIG_FHA_2,39,45,False,False,False,False,False,False,False
+LIG_LIR_Gen_1,39,49,False,False,False,False,False,False,False
+LIG_LIR_Gen_1,41,49,False,False,False,False,False,False,False
+LIG_LIR_Nem_3,39,45,False,False,False,False,False,False,False
+LIG_LIR_Nem_3,41,45,False,False,False,False,False,False,False
+MOD_Plk_4,38,44,False,False,False,False,False,False,False
+MOD_ProDKin_1,16,22,False,False,False,False,False,False,False

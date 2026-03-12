@@ -1,0 +1,16 @@
+elm_identifier,start,stop,is_annotated,is_phiblastmatch,is_filtered,phiblast,topodomfilter,taxonfilter,structure
+DEG_Nend_Nbox_1,1,2,False,False,False,False,False,False,False
+DOC_USP7_MATH_1,27,31,False,False,False,False,False,False,False
+DOC_WW_Pin1_4,19,24,False,False,False,False,False,False,False
+DOC_WW_Pin1_4,75,80,False,False,False,False,False,False,False
+LIG_Arc_Nlobe_1,18,22,False,False,False,False,False,False,False
+LIG_Arc_Nlobe_1,55,59,False,False,False,False,False,False,False
+LIG_FHA_1,20,26,False,False,False,False,False,False,False
+LIG_MYND_1,15,19,False,False,False,False,False,False,False
+LIG_WD40_WDR5_VDV_2,78,81,False,False,False,False,False,False,False
+MOD_GSK3_1,33,40,False,False,False,False,False,False,False
+MOD_GSK3_1,34,41,False,False,False,False,False,False,False
+MOD_GlcNHglycan,29,32,False,False,False,False,False,False,False
+MOD_ProDKin_1,19,25,False,False,False,False,False,False,False
+MOD_ProDKin_1,75,81,False,False,False,False,False,False,False
+TRG_DiLeu_BaEn_1,13,18,False,False,False,False,False,False,False

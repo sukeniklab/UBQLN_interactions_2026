@@ -1,0 +1,8 @@
+elm_identifier,start,stop,is_annotated,is_phiblastmatch,is_filtered,phiblast,topodomfilter,taxonfilter,structure
+LIG_PDZ_Class_1,49,54,False,False,False,False,False,False,False
+MOD_GSK3_1,18,25,False,False,False,False,False,False,False
+MOD_GlcNHglycan,46,49,False,False,False,False,False,False,False
+MOD_N-GLC_1,49,54,False,False,False,False,False,False,False
+MOD_PIKK_1,12,18,False,False,False,False,False,False,False
+MOD_PIKK_1,5,11,False,False,False,False,False,False,False
+MOD_PKA_2,10,16,False,False,False,False,False,False,False
