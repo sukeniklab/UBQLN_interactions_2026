@@ -20,10 +20,10 @@ def solve_weight(target, mean_unbound, mean_bound):
 trials = list(range(1, 11))
 
 variants = {
-    "FL":   {"mods": ["full", "full_bound"], "exp_rg": 36.56, "err": 0.15},
-    "dTH1": {"mods": ["deltaTH1", "deltaTH1_bound"], "exp_rg": 35.74, "err": 0.25},
-    "dTH2": {"mods": ["deltaTH2", "deltaTH2_bound"], "exp_rg": 37.40, "err": 0.18},
-    "dTH3": {"mods": ["deltaTH3", "deltaTH3_bound"], "exp_rg": 40.15, "err": 0.15},
+    "FL":   {"mods": ["full", "full_bound"], "exp_rg": 37.2, "err": 0.5},
+    "ΔHS1": {"mods": ["deltaTH1", "deltaTH1_bound"], "exp_rg": 36.2, "err": 0.2},
+    "ΔHS2": {"mods": ["deltaTH2", "deltaTH2_bound"], "exp_rg": 38.5, "err": 0.2},
+    "ΔHS3": {"mods": ["deltaTH3", "deltaTH3_bound"], "exp_rg": 41.1, "err": 0.2},
     "I45A": {"mods": ["full", "full_bound"], "exp_rg": 39.1, "err": 0.2},
 }
 
@@ -46,7 +46,15 @@ for var_name, config in variants.items():
     for mod in mods:
         trial_means = []
         for trial in trials:
-            Rg = np.load(f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mod}/Dsk2_{mod}/0/Rg_traj.npy")
+            # Map mod name to file name
+            if mod.startswith("full"):
+                file_prefix = "Dsk2_full"
+                if "_bound" in mod:
+                    file_prefix = "Dsk2_full_bound"
+            else:
+                file_prefix = mod
+            
+            Rg = np.load(f"raw_rg_data/{file_prefix}_trial{trial}.npy")
             mean_rg_tri = 10 * np.mean(Rg)
             trial_means.append(mean_rg_tri)
         
@@ -96,11 +104,11 @@ for i in range(len(variants)):
     
     if wo > 6:
         ax.text(x[i], wo / 2, f"{wo:.0f}%", ha='center', va='center',
-                fontsize=12, color='white')
+                fontsize=12, color='k')
     
     if wc > 6:
         ax.text(x[i], wo + wc / 2, f"{wc:.0f}%", ha='center', va='center',
-                fontsize=12, color='white')
+                fontsize=12, color='k')
 
 ax.set_xticks(x)
 ax.set_xticklabels(var_names, fontsize=14)
@@ -112,5 +120,5 @@ ax.tick_params(axis='y', labelsize=12)
 ax.legend(fontsize=10, loc='upper right')
 
 plt.tight_layout()
-plt.savefig('Dsk2_deletions_weighted_bar.svg', dpi=300, bbox_inches='tight')
+plt.savefig('Fig4d.svg', dpi=300, bbox_inches='tight')
 plt.close()
