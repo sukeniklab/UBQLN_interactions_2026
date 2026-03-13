@@ -46,9 +46,10 @@ color_i45a  = 'red'                 # I45A weighted ensemble
 bins = np.arange(0, 85, 0.75)
 bin_centers = 0.5 * (bins[1:] + bins[:-1])
 
-exp_rg_fl   = 35.56
-exp_rg_i45a = 37.4
-
+exp_rg_fl   = 37.2
+ex_rg_fl_err = 0.5
+exp_rg_i45a = 39.1
+ex_rg_i45a_err = 0.2
 # Shared axis limits
 XLIM      = (20, 80)
 YLIM      = (0, 0.07)
@@ -64,7 +65,7 @@ n_samples_per_trial = None
 for j in range(len(mods)):
     avg_rg = []
     for trial in trials:
-        rg = 10 * np.load(f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mods[j]}/0/Rg_traj.npy")
+        rg = 10 * np.load(f"raw_rg_data/Dsk2_{mods[j]}_trial{trial}.npy")
         all_rg_data[j].append(rg)
         avg_rg.append(np.mean(rg))
         n_samples_per_trial = len(rg)
@@ -93,7 +94,7 @@ for j in range(len(mods)):
     avg_rg, histo_rg = [], []
     for trial in trials:
         rg = 10 * np.load(
-            f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mods[j]}/0/Rg_traj.npy")
+            f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mods[j]}/Dsk2_{mods[j]}/0/Rg_traj.npy")
         h, _ = np.histogram(rg, bins=bins)
         histo_rg.append(h / h.sum())
         avg_rg.append(np.mean(rg))
@@ -137,8 +138,9 @@ ax.fill_between(bin_centers, mean_fl - std_fl, mean_fl + std_fl,
                 color=color_fl, alpha=0.2, linewidth=0, zorder=50)
 ax.fill_between(bin_centers, mean_fl, color=color_fl, alpha=0.1)
 
-axes[1].text(53, 0.06, f"FL={np.mean(means_fl):.1f}±{np.std(means_fl):.1f} Å", color=color_fl, fontsize=12)
-axes[1].axvline(36.56, color=color_fl, linestyle='dashed', linewidth=1.5, label="Exp. FL = 36.6 Å")
+axes[1].text(53, 0.06, f"FL={np.mean(exp_rg_fl):.1f}±{ex_rg_fl_err:.1f} Å", color=color_fl, fontsize=12)
+axes[1].axvline(exp_rg_fl, color=color_fl, linestyle='dashed', linewidth=1.5, label=f"Exp. FL = {exp_rg_fl} Å")
+axes[1].axvspan(exp_rg_fl - ex_rg_fl_err, exp_rg_fl + ex_rg_fl_err, color=color_fl, alpha=0.3, linewidth=0)
 
 ax.set_xlim(*XLIM)
 ax.set_ylim(*YLIM)
@@ -155,8 +157,9 @@ ax.fill_between(bin_centers, mean_i45a - std_i45a, mean_i45a + std_i45a,
                 color=color_i45a, alpha=0.2, linewidth=0, zorder=50)
 ax.fill_between(bin_centers, mean_i45a, color=color_i45a, alpha=0.1)
 
-axes[2].axvline(38.53, color=color_i45a, linestyle='dashed', linewidth=1.5, label="Exp. I45A = 38.5 Å")
-axes[2].text(50, 0.06, f"I45A={np.mean(means_i45a):.1f}±{np.std(means_i45a):.1f} Å", color=color_i45a, fontsize=12)
+axes[2].axvline(exp_rg_i45a, color=color_i45a, linestyle='dashed', linewidth=1.5, label=f"Exp. I45A = {exp_rg_i45a} Å")
+axes[2].axvspan(exp_rg_i45a - ex_rg_i45a_err, exp_rg_i45a + ex_rg_i45a_err, color=color_i45a, alpha=0.15, linewidth=0)
+axes[2].text(50, 0.06, f"I45A={np.mean(exp_rg_i45a):.1f}±{ex_rg_i45a_err:.1f} Å", color=color_i45a, fontsize=12)
 
 ax.set_xlim(*XLIM)
 ax.set_ylim(*YLIM)
@@ -166,5 +169,5 @@ ax.tick_params(axis='both', labelsize=FS_LABEL)
 ax.set_xlabel('$R_g$ ($\\AA$)', fontsize=FS_LABEL)
 
 plt.subplots_adjust(hspace=0)
-plt.savefig('Dsk2_rg_stacked_panels.svg', dpi=300, bbox_inches='tight')
+plt.savefig('Fig1a.svg', dpi=300, bbox_inches='tight')
 plt.close()

@@ -21,7 +21,7 @@ mods   = ["full", "full_bound"]
 trials = list(range(1, 11))
 
 variants = {
-    "Dsk2 FL":   {"exp_rg": 37.2, "err": 0.15},
+    "Dsk2 FL":   {"exp_rg": 37.2, "err": 0.5},
     "Dsk2 I45A": {"exp_rg": 39.1, "err": 0.2},
 }
 
@@ -37,7 +37,7 @@ avg_rgs = {}
 for mod in mods:
     trial_means = [] 
     for trial in trials:
-        Rg = np.load(f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mod}/Dsk2_{mod}/0/Rg_traj.npy")
+        Rg = np.load(f"raw_rg_data/Dsk2_{mod}_trial{trial}.npy")
         mean_rg_tri = 10 * np.mean(Rg)
         trial_means.append(mean_rg_tri)
     
@@ -107,5 +107,5 @@ ax.set_yticks([0, 25, 50, 75, 100])
 ax.tick_params(axis='y', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('Dsk2_weighted_bar.svg', dpi=300, bbox_inches='tight')
+plt.savefig('Fig1b.svg', dpi=300, bbox_inches='tight')
 plt.close()

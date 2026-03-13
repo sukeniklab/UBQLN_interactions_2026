@@ -13,7 +13,7 @@ plt.rcParams['ytick.major.width'] = 1.2
 plt.rcParams['font.sans-serif'] = 'Arial'
 
 
-input_file = 'identify_disordered_regions/disorder_complete_metapredictv3_Dec17.csv'
+input_file = 'disorder_complete_metapredictv3_Dec17.csv'
 
 LINKER_THRESHOLD = 30  
 
