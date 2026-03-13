@@ -19,7 +19,7 @@ for idx, s in enumerate(input_seqs):
 
 batch_out = meta.predict_disorder_batch(clean_seqs, version=metapredict_version, return_domains=True)
 
-# Save comprehensive data
+# Save data
 outstring = f'disorder_complete_metapredict{metapredict_version}_Dec17.csv'
 
 with open(outstring, 'w', newline='') as fh:
