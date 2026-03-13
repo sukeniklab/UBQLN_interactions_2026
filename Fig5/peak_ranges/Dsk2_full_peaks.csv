@@ -1,0 +1,4 @@
+protein,IDR,STI1_domain,condition,peak_residue,start,end,prominence
+Dsk2_full,1,1,unbound,121,112,126,31.52
+Dsk2_full,2,1,unbound,284,277,292,38.27
+Dsk2_full,2,1,unbound,311,304,316,24.07

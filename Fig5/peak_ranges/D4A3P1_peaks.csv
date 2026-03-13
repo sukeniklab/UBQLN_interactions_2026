@@ -1,0 +1,8 @@
+protein,IDR,STI1_domain,condition,peak_residue,start,end,prominence
+D4A3P1,1,1,unbound,134,129,138,26.42
+D4A3P1,1,1,unbound,158,151,163,182.79
+D4A3P1,2,1,unbound,294,283,298,42.88
+D4A3P1,2,1,unbound,314,309,319,23.16
+D4A3P1,2,1,unbound,326,320,330,28.62
+D4A3P1,3,1,unbound,486,481,491,26.51
+D4A3P1,3,1,unbound,536,530,541,35.23

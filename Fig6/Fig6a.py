@@ -15,34 +15,26 @@ plt.rcParams['axes.linewidth'] = 2.5
 plt.rcParams['font.size'] = 28
 plt.rcParams['font.sans-serif'] = 'Arial'
 
-# ═══════════════════════════════════════════════════════════════════════════
-# SELECT WHICH STI1 DOMAIN TO ANALYZE
-# ═══════════════════════════════════════════════════════════════════════════
-STI1_DOMAIN = 1  # Change to 1 or 2 to analyze different STI1 domains
+
+STI1_DOMAIN = 1  # which STI1 domain to focus on 
 
 MOTIFS_OF_INTEREST = [
     "LIG_LIR_Nem_3",
     "DOC_WW_Pin1_4",
     "LIG_EH_1",
     "DOC_USP7_MATH_1",
-    "MOD_GSK3_1", 
-    "DOC_PP2A_B56_1"
 ]
 
-# Custom colors for specific motifs (overrides functional category colors)
-# Format: "motif_id": "hex_color"
 MOTIF_COLORS = {
-    "LIG_LIR_Nem_3": "darkorange",           
-    "LIG_EH_1": "cyan",               
-    "DOC_USP7_MATH_1": "mediumpurple",        
-    "MOD_GSK3_1": "hotpink",              
-    "DOC_PP2A_B56_1": "yellow",          
+    "LIG_LIR_Nem_3": "#ff6600ff",           
+    "LIG_EH_1": "#00ffffff",               
+    "DOC_USP7_MATH_1": "#aa87deff",        
+    "DOC_WW_Pin1_4": "#78f07aff",        
 }
 
 
 home_dir = "/home/jkniblo/IDR_folded"
 
-# ── Protein definitions ───────────────────────────────────────────────────────
 domain_dict = {
     "P48510": [[1,75],[147,223],[327,373]],
     "Q9UMX0": [[37,107],[182,251],[387,470],[542,585]],
@@ -71,7 +63,6 @@ linker_file_mapping = {
     "Q9VWD9": {1:0, 2:1, 3:2}, "G5EFF7": {1:0, 2:1, 3:2},
 }
 
-# Mapping between peak detection names and UniProt IDs
 peak_to_uniprot = {
     "Dsk2_full": "P48510",
     "Q9UMX0": "Q9UMX0", "Q9UHD9": "Q9UHD9", "Q9NRR5": "Q9NRR5",

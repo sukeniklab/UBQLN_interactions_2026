@@ -1,0 +1,8 @@
+protein,IDR,STI1_domain,condition,peak_residue,start,end,prominence
+Q9JJP9,1,1,unbound,139,132,147,60.73
+Q9JJP9,2,1,unbound,264,258,270,59.05
+Q9JJP9,2,1,unbound,286,280,291,39.8
+Q9JJP9,2,1,unbound,313,306,319,106.35
+Q9JJP9,2,1,unbound,364,358,370,43.37
+Q9JJP9,3,1,unbound,477,473,482,28.48
+Q9JJP9,3,1,unbound,518,511,526,27.88

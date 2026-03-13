@@ -1,8 +1,6 @@
 import numpy as np
 import MDAnalysis as mda
 from sklearn.neighbors import NearestNeighbors
-from dask import delayed, compute
-from dask.distributed import Client
 import sys
 import os 
 
@@ -47,9 +45,8 @@ def check_termini(inside_mask, idr_atoms, ref_positions, center):
     rescued_mask = inside_mask.copy()
     
     ref_distances = np.linalg.norm(ref_positions - center, axis=1) #TODO: update this for efficency? 
-    tight_cutoff = np.max(ref_distances) * 0.5 # Tighter than original alpha filter
+    tight_cutoff = np.max(ref_distances) * 0.5
 
-    # check that termini are within tighter cutoff
     terminiAtoms = [144, 145, 223, 224, 225, 226] 
     for idx, atom in enumerate(idr_atoms):
         if not inside_mask[idx] and (atom.resid in terminiAtoms):
@@ -222,20 +219,6 @@ information = {
             
             },
 
-            "Q9UHD9_deltaSTI1-II": { ##UBQLN2 delete STI1-II
-                    "STI1_ref_ids": [[233, 243, 236, 237, 223, 200, 194, 190, 204, 210, 213, 220, 230, 185, 181, 224, 234]], 
-                    "STI1_exterior_ids": [[216, 217, 209, 219, 212, 215, 218, 221, 205, 206, 202, 199, 196, 241, 242, 222, 225, 227, 195, 231, 229, 226, 201, 197, 224, 214, 198, 213, 208, 203, 193, 189, 207, 211, 191, 192, 186, 183, 179, 177, 184, 187, 188, 228, 235, 238, 232, 239, 240, 182, 180, 244, 178]],
-                     "idr":[[104,177], [248,492]],
-            },
-
-            "Q9UHD9_deltaSTI1-II_bound": { ##UBQLN2 delete STI1-II
-                    "STI1_ref_ids": [[233, 243, 236, 237, 223, 200, 194, 190, 204, 210, 213, 220, 230, 185, 181, 224, 234]], 
-                    "STI1_exterior_ids": [[216, 217, 209, 219, 212, 215, 218, 221, 205, 206, 202, 199, 196, 241, 242, 222, 225, 227, 195, 231, 229, 226, 201, 197, 224, 214, 198, 213, 208, 203, 193, 189, 207, 211, 191, 192, 186, 183, 179, 177, 184, 187, 188, 228, 235, 238, 232, 239, 240, 182, 180, 244, 178]],
-                     "idr":[ [104,177], [248,492]],
-            },
-
-
-
 
           "Q9NRR5": { ##UBQLN4
                     "STI1_ref_ids": [
@@ -299,11 +282,7 @@ information = {
                     "idr":[ [94,162], [232,363], [445,490]],
 
             },
-            #         "STI1_ref_ids": [[178, 184, 187, 193, 197, 204, 194, 188, 191, 217, 218, 221, 214, 207], [403, 400, 393, 390, 383, 394, 384, 380, 376, 371, 404, 410, 414, 413, 423, 420, 423, 428, 429, 367, 368]],
-            #         "STI1_exterior_ids": [[172, 173, 174, 175, 176, 177, 179, 180, 181, 182, 183, 185, 186, 189, 190, 192, 195, 196, 198, 199, 200, 201, 202, 203, 205, 206, 208, 209, 210, 211, 212, 213, 215, 216, 219, 220],
-            #                               [364, 365, 366, 369, 370, 372, 373, 374, 375, 377, 378, 379, 381, 382, 385, 386, 387, 388, 389, 391, 392, 395, 396, 397, 398, 399, 401, 402, 405, 406, 407, 408, 409, 411, 412, 415, 416, 417, 418, 419, 421, 422, 424, 425, 426, 427, 430]],
-            #         "idr":[ [94,152], [246,363], [445,490]],
-            # },
+   
 
             
             "G5EFF7": {
@@ -423,10 +402,6 @@ traj = f"{path}/{inner_name}/0/{inner_name}.dcd"
 u = mda.Universe(top, traj)
 
 
-
-
-
-# u = mda.Universe(f"{path}/{protein}/0/top_0.pdb", f"{path}/{protein}/0/{protein}.dcd")
 number_STI1 = len(information[protein]["STI1_ref_ids"])
 
 for sti1_num in range(number_STI1):
@@ -464,13 +439,13 @@ for sti1_num in range(number_STI1):
 
                 job_list = []
                 for array in result:
-                    results += np.array(array) # Add's each snapshot to a total array that represents a single run
+                    results += np.array(array) 
 
         if len(job_list) != 0:
             print(f'Processing remaining tasks (n-tasks {len(job_list)})')
             result = compute(*job_list)
             for array in result:
-                results += np.array(array) # Add's each snapshot to a total array that represents a single run
+                results += np.array(array) 
             
         np.save(outputfile, results)
 
