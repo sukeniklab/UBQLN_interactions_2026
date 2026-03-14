@@ -1,0 +1,9 @@
+numpy
+pandas
+matplotlib
+scipy
+biopython
+MDAnalysis
+scikit-learn
+metapredict
+protfasta
