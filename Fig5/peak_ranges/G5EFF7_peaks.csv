@@ -1,4 +1,8 @@
 protein,IDR,STI1_domain,condition,peak_residue,start,end,prominence
-G5EFF7,2,1,unbound,244,238,252,103.89
-G5EFF7,2,1,unbound,270,266,276,20.87
-G5EFF7,3,1,unbound,442,433,447,17.51
+G5EFF7,2,1,unbound,244,236,254,103.89
+G5EFF7,2,1,unbound,270,264,278,20.87
+G5EFF7,3,1,unbound,442,431,449,17.51
+G5EFF7,2,2,unbound,224,216,231,23.01
+G5EFF7,2,2,unbound,244,236,265,92.77
+G5EFF7,3,2,unbound,417,410,423,21.76
+G5EFF7,3,2,unbound,443,431,453,48.17

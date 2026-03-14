@@ -1,5 +1,12 @@
 protein,IDR,STI1_domain,condition,peak_residue,start,end,prominence
-Q9UMX0,1,1,unbound,146,139,157,28.45
-Q9UMX0,2,1,unbound,273,266,281,84.09
-Q9UMX0,2,1,unbound,295,290,303,30.07
-Q9UMX0,2,1,unbound,321,309,326,31.64
+Q9UMX0,1,1,unbound,146,137,159,28.45
+Q9UMX0,2,1,unbound,273,264,283,84.09
+Q9UMX0,2,1,unbound,295,288,305,30.07
+Q9UMX0,2,1,unbound,321,307,328,31.64
+Q9UMX0,1,2,unbound,151,140,157,17.04
+Q9UMX0,2,2,unbound,271,263,281,41.64
+Q9UMX0,2,2,unbound,294,287,301,26.74
+Q9UMX0,2,2,unbound,323,310,334,75.67
+Q9UMX0,2,2,unbound,363,356,372,18.39
+Q9UMX0,3,2,unbound,490,477,506,66.68
+Q9UMX0,3,2,unbound,525,515,533,40.32
