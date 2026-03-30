@@ -11,7 +11,6 @@ plt.rcParams['font.size'] = 28
 plt.rcParams['font.sans-serif'] = 'Arial'
 
 def smooth_log_histogram(log_histogram, smooth, fill_value=None):
-    """Smooth log histogram with gap filling for missing data"""
     valid_mask = ~np.isnan(log_histogram)
     
     if np.sum(valid_mask) < 4:
@@ -50,7 +49,6 @@ labels = [['STI1-1', 'STI1-2']]
 linestyle = [['-', '-']]
 alpha = [[1, 1]]
 
-# All protein information
 information = {
     "P48510": {"idr": [[75, 145], [223, 325]]},  # Dsk2_full
     "Q9UMX0": {"idr": [[108, 181], [252, 386], [471, 541]]},
@@ -65,7 +63,6 @@ information = {
     "D4AA63": {"idr": [[104, 174], [275, 381], [483, 591]]},
 }
 
-# Custom x-axis limits for each protein's IDRs
 protein_xlims = {
     "Q9VWD9": [(80, 112), (236, 290), (420, 490)],
     "Q9SII8": [(95, 150), (265, 375), (465, 495)],
@@ -77,7 +74,7 @@ protein_xlims = {
     "D4A3P1": [(85, 165), (275, 370), (481, 545)],
     "D4AA63": [(110, 168), (292, 380), (490, 580)],
     "Q9JJP9": [(105, 155), (250, 380), (465, 535)],
-    "P48510": [(75, 142), (235, 325)],  # Dsk2_full
+    "P48510": [(75, 142), (235, 325)],  
 }
 
 prot_name_map = {
@@ -94,7 +91,6 @@ prot_name_map = {
     "G5EFF7": "UBQL_CElegans",
 }
 
-# Phylogenetic tree setup
 TREE_NAME_TO_PID = {
     "C. Elegans UBQN": "G5EFF7",
     "Human UBQLN2": "Q9UHD9",
@@ -109,18 +105,8 @@ TREE_NAME_TO_PID = {
     "Yeast Dsk2": "P48510",
 }
 
-NEWICK = (
-    "((('C. Elegans UBQN':0.21974,((((('Mouse UBQL2':0.01422,'Rat UBQLN2':0.01422)"
-    "Inner3:0.03392,'Human UBQLN2':0.04814)Inner7:0.06534,((('Mouse UBQL1':0.01313,"
-    "'Rat UBQLN1':0.01313)Inner2:0.02872,'Human UBQLN1':0.04185)Inner6:0.04007,"
-    "'Frog UBQLN4':0.08192)Inner8:0.03156)Inner9:0.06903,('Zebra Fish UBQN':0.12486,"
-    "(('Mouse UBQL4':0.00821,'Rat UBQLN4':0.00821)Inner1:0.01887,'Human UBQLN4':0.02708)"
-    "Inner4:0.09778)Inner10:0.02608)Inner11:0.06816,'Fly UBQN':0.19302)Inner12:0.02672)"
-    "Inner13:0.01636,('Plant Dsk2A':0.04048,'Plant Dsk2B':0.04048)Inner5:0.19562)"
-    "Inner14:0.14055,'Yeast Dsk2':0.36029)Inner15:0.00000;"
-)
 
-tree = Phylo.read(StringIO(NEWICK), 'newick')
+tree = Phylo.read("phylo_tree.nwk", "newick")
 tree.root_with_outgroup({'name': 'Yeast Dsk2'})
 all_tips = [c.name for c in tree.get_terminals()]
 
@@ -154,7 +140,6 @@ for protein in DISPLAY_ORDER:
             idr_residue_ranges[i]['min'] = min(idr_residue_ranges[i]['min'], xlim_min)
             idr_residue_ranges[i]['max'] = max(idr_residue_ranges[i]['max'], xlim_max)
 
-# Create aligned positions based on actual residue ranges
 aligned_positions = {}
 cumulative_pos = 0
 for i in sorted(idr_residue_ranges.keys()):
@@ -172,30 +157,24 @@ for i in sorted(idr_residue_ranges.keys()):
 
 total_width = cumulative_pos - GAP_SIZE
 
-# Calculate all tick positions and labels across ALL IDR regions
-all_tick_info = []  # List of (plot_x, residue_number, idr_index)
+all_tick_info = []  
 
 for i in aligned_positions.keys():
     plot_start = aligned_positions[i]['plot_start']
     res_min = aligned_positions[i]['res_min']
     res_max = aligned_positions[i]['res_max']
     
-    # Find first residue divisible by 30 in this range
     start_res = ((res_min // 30) + 1) * 30
     
-    # Generate ticks every 30 residues
     for res in range(start_res, res_max + 1, 30):
         plot_x = plot_start + (res - res_min)
         all_tick_info.append((plot_x, res, i))
 
-# Sort by plot position
 all_tick_info.sort(key=lambda x: x[0])
 
-# Extract positions and labels
 all_tick_positions = [x[0] for x in all_tick_info]
 all_tick_labels = [str(x[1]) for x in all_tick_info]
 
-# Create combined figure
 fig, axes = plt.subplots(len(DISPLAY_ORDER), 1,
                          figsize=(20, 3.3 * len(DISPLAY_ORDER)),
                          sharex=False)
@@ -213,7 +192,6 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
     
     for con, config in enumerate(configs):
         for sti1 in range(2):
-            # For yeast, always use blue color
             if protein == "P48510":
                 c = 'blue'
             else:
@@ -229,14 +207,14 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
                     try:
                         # Load histograms - handle Dsk2 special case
                         if protein == "P48510":
-                            histogram = np.load(f"old_pipeline_histos/Dsk2_full{config}_trial{trial}_innerVol_idr{section[0]}_{section[1]}.npy")
+                            histogram = np.load(f"histos/Dsk2_full{config}_trial{trial}_innerVol_idr{section[0]}_{section[1]}.npy")
                             histogram /= snaps
-                            histogram_ev = np.load(f"old_pipeline_histos/Dsk2_full_EV_trial{trial}_innerVol_idr{section[0]}_{section[1]}.npy")
+                            histogram_ev = np.load(f"histos/Dsk2_full_EV_trial{trial}_innerVol_idr{section[0]}_{section[1]}.npy")
                             histogram_ev /= snaps_large
                         else:
-                            histogram = np.load(f"old_pipeline_histos/{protein}{config}_trial{trial}_STI1{sti1+1}_idr{section[0]}_{section[1]}.npy")
+                            histogram = np.load(f"histos/{protein}{config}_trial{trial}_STI1{sti1+1}_idr{section[0]}_{section[1]}.npy")
                             histogram /= snaps_large
-                            histogram_ev = np.load(f"old_pipeline_histos/{protein}_EV_trial{trial}_STI1{sti1+1}_idr{section[0]}_{section[1]}.npy")
+                            histogram_ev = np.load(f"histos/{protein}_EV_trial{trial}_STI1{sti1+1}_idr{section[0]}_{section[1]}.npy")
                             histogram_ev /= snaps_large
                         
                         # Process EV histogram
@@ -266,19 +244,15 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
                     except Exception as e:
                         continue
                 
-                # Remove empty trials
                 all_ratios = all_ratios[~np.all(all_ratios == 0, axis=1)]
                 
-                # Skip if no valid data
                 if len(all_ratios) == 0 or np.all(np.isnan(all_ratios)):
                     continue
                 
-                # Calculate statistics
                 mean_ratio = np.nanmean(all_ratios, axis=0)
                 std_ratio = np.nanstd(all_ratios, axis=0)
                 residues = np.arange(section[0], section[1]+1, 1)
                 
-                # Apply custom x-limits
                 if protein in protein_xlims and i < len(protein_xlims[protein]):
                     xlim_min, xlim_max = protein_xlims[protein][i]
                     mask = (residues >= xlim_min) & (residues <= xlim_max)
@@ -286,16 +260,13 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
                     mean_ratio = mean_ratio[mask]
                     std_ratio = std_ratio[mask]
                 
-                # Track max for y-limit
                 all_max_values.append(np.nanmax(mean_ratio + std_ratio))
                 
                 # Map residues to plot x-coordinates
-                # Residue number maps directly to position within the IDR slot
                 plot_start = aligned_positions[i]['plot_start']
                 res_min = aligned_positions[i]['res_min']
                 
                 # For each residue, calculate its plot position
-                # residue N maps to position: plot_start + (N - res_min)
                 plot_x = plot_start + (residues - res_min)
                 
                 # Plot the excess probability
@@ -314,14 +285,12 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
     if all_max_values and not all(np.isnan(all_max_values)):
         max_val = np.nanmax(all_max_values)
         y_limit = min(max_val * 1.2, 600)
-        # Round up to nearest value divisible by 20
         y_limit = int(np.ceil(y_limit / 20) * 20)
     else:
         y_limit = 600
     
     ax.set_ylim(0, y_limit)
     
-    # Draw vertical dashed lines between IDR regions
     for i in range(max(aligned_positions.keys())):
         if i in aligned_positions and (i+1) in aligned_positions:
             boundary_x = aligned_positions[i]['plot_end'] + GAP_SIZE/2
@@ -332,49 +301,37 @@ for prot_idx, protein in enumerate(DISPLAY_ORDER):
     ax.set_yticks([0, y_limit//2, y_limit])
     ax.tick_params(axis='y', labelsize=28, length=8, width=2.5)
     
-    # Add horizontal grid lines at y-tick positions
     ax.grid(axis='y', color='grey', linestyle='-', linewidth=0.5, alpha=0.8, zorder=1)
     
-    # Draw vertical grid lines at ALL tick positions
     for grid_x in all_tick_positions:
         ax.axvline(x=grid_x, color='grey', linewidth=0.5, alpha=0.8, zorder=1)
     
     ax.set_axisbelow(True)
     
-    # Set tick positions (but show labels only on bottom subplot)
     ax.set_xticks(all_tick_positions)
     if prot_idx == len(DISPLAY_ORDER) - 1:
-        # Bottom subplot: show labels with thicker tick marks
         ax.set_xticklabels(all_tick_labels, fontsize=28)
         ax.tick_params(axis='x', length=8, width=2.5)
     else:
-        # Other subplots: no labels, but keep thicker tick marks
         ax.set_xticklabels([])
         ax.tick_params(axis='x', length=8, width=2.5)
     
-    # Add boundary line after deep species
     if prot_idx == boundary_idx:
         ax.axhline(y=-y_limit*0.15, color='#7F8C8D', linewidth=1.5,
                   linestyle='--', zorder=10)
     
-    # Remove top and right spines
     for sp in ['top', 'right']:
         ax.spines[sp].set_visible(False)
 
-# Only add x-label to bottom plot
 axes[-1].set_xlabel("Residue Number", fontsize=28)
 
-# Add common y-label
 fig.text(0.02, 0.5, "Occupancy Fold Change ($P_{g}$/$P_{g,EV}$)", 
          va='center', rotation='vertical', fontsize=28)
 
-# Add legend
 axes[0].legend(loc='upper right', fontsize=28, framealpha=0.9)
 
 plt.tight_layout(pad=0.5)
 plt.subplots_adjust(left=0.08, right=0.98, hspace=0.15)
 
-plt.savefig('ALL_PROTEINS_excess_prob_aligned_tree_ordered_v2.png', dpi=300, bbox_inches="tight")
-plt.savefig('ALL_PROTEINS_excess_prob_aligned_tree_ordered_v2.svg', bbox_inches="tight")
-print("Saved ALL_PROTEINS_excess_prob_aligned_tree_ordered.png")
+plt.savefig('Fig_SI8.svg', bbox_inches="tight")
 plt.close()
