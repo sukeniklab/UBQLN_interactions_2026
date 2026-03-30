@@ -19,8 +19,7 @@ def solve_weight(target, mean_unbound, mean_bound):
 def load_mod(mod, trials):
     arrays, trial_means = [], []
     for trial in trials:
-        rg = 10 * np.load(
-            f"../../Data/old_pipeline/CALVADOS3COM_2.0_MD_gpu_trial{trial}_Dsk2_{mod}/Dsk2_{mod}/0/Rg_traj.npy")
+        rg = 10 * np.load(f"raw_rg_data/{mod}_trial{trial}.npy")
         arrays.append(rg)
         trial_means.append(np.mean(rg))
     return arrays, np.mean(trial_means), np.std(trial_means)
@@ -53,7 +52,7 @@ def make_weighted_ensemble(arrays_unbound, arrays_bound, weight, bins):
 trials = list(range(1, 11))
 
 variants = {
-    "FL": {"mods": ["full", "full_bound"], "exp_rg": 37.2, "err": 0.5, "color": "grey"},
+    # "FL": {"mods": ["full", "full_bound"], "exp_rg": 37.2, "err": 0.5, "color": "grey"},
 
     "ΔHS1": {"mods": ["deltaTH1", "deltaTH1_bound"], "exp_rg": 36.2, "err": 0.2, "color": "green"},
     "ΔHS2": {"mods": ["deltaTH2", "deltaTH2_bound"], "exp_rg": 38.5, "err": 0.2, "color": "fuchsia"},
@@ -112,13 +111,7 @@ for ax, (var_name, config) in zip(axes, variants.items()):
                     color=color_bound, alpha=0.2, linewidth=0, zorder=50)
     ax.fill_between(bin_centers, dist_b_mean, color=color_bound, alpha=0.1)
     
-    # ax.plot(bin_centers, ens_mean, color=config["color"], alpha=1.0,
-    #         label=f"{var_name} Ensemble ({ens_rg:.1f}±{ens_rg_std:.1f} Å)", linewidth=2)
-    # ax.fill_between(bin_centers, ens_mean - ens_std, ens_mean + ens_std,
-    #                 color=config["color"], alpha=0.4, linewidth=0, zorder=50)
-    # ax.fill_between(bin_centers, ens_mean, color=config["color"], alpha=0.2)
 
-    # Text annotations for simulation averages
     ax.text(52, 0.06, f"Open={mean_u:.1f}±{std_u:.1f} Å",
             color=color_unbound, fontsize=12)
     ax.text(52, 0.055, f"Closed={mean_b:.1f}±{std_b:.1f} Å",
@@ -135,7 +128,6 @@ for ax, (var_name, config) in zip(axes, variants.items()):
                ymin=0, ymax=0.1 / 0.065,
                label=f"Exp. {var_name} = {config['exp_rg']:.1f}±{config['err']:.1f} Å")
     
-    # Shaded error region around experimental value
     ax.axvspan(config["exp_rg"] - config["err"], config["exp_rg"] + config["err"],
                color=config["color"], alpha=0.3, linewidth=0, zorder=1)
 
@@ -150,5 +142,5 @@ for ax, (var_name, config) in zip(axes, variants.items()):
         ax.set_xticklabels([])
 
 plt.subplots_adjust(hspace=0)
-plt.savefig('Dsk2_deletions_rg_stacked_withFL.svg', dpi=300, bbox_inches='tight')
+plt.savefig('Fig_S6.svg', dpi=300, bbox_inches='tight')
 plt.close()
