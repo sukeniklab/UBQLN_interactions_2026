@@ -1,0 +1,13 @@
+construct        = Dsk2_I45A
+
+── Deterministic fit ──
+x_open           = 0.237912 ± 0.005319
+x_closed         = 0.762088
+sigma_scale      = 0.699938 ± 0.000836
+chi2_red         = 3.161812
+
+── Ensemble draw ──
+n_draws          = 50000
+seed             = 13206
+n_open_frames    = 133000
+n_closed_frames  = 133000

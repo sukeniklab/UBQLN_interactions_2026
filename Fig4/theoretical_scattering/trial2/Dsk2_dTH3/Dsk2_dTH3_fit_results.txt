@@ -1,0 +1,13 @@
+construct        = Dsk2_dTH3
+
+── Deterministic fit ──
+x_open           = 0.390721 ± 0.004373
+x_closed         = 0.609279
+sigma_scale      = 0.903308 ± 0.000880
+chi2_red         = 2.358579
+
+── Ensemble draw ──
+n_draws          = 50000
+seed             = 41789
+n_open_frames    = 133000
+n_closed_frames  = 133000

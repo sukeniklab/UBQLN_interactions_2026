@@ -12,64 +12,40 @@ plt.rcParams['ytick.major.width'] = 1.5
 plt.rcParams['font.sans-serif'] = 'Arial'
 
 
-def solve_weight(target, mean_unbound, mean_bound):
-
-    w = (target - mean_bound) / (mean_unbound - mean_bound)
-    return np.clip(w, 0, 1)
-
-mods   = ["full", "full_bound"]
-trials = list(range(1, 11))
-
 variants = {
-    "Dsk2 FL":   {"exp_rg": 37.2, "err": 0.5},
-    "Dsk2 I45A": {"exp_rg": 39.1, "err": 0.2},
+   
+    "FL": {"mods": ["full", "full_bound"],
+             "weight_open": 5.8,  
+             "err_lo": 1.0,        
+             "err_hi": 1.0},        
+   
+    "I45A": {"mods": ["full", "full_bound"],
+             "weight_open": 24.4,   
+             "err_lo": 0.8,         
+             "err_hi": 0.8},       
+
 }
 
 colors_open   = "blue"
 colors_closed = "purple"
-face_open     = mcolors.to_rgba(colors_open,   alpha=0.2)
-face_closed   = mcolors.to_rgba(colors_closed, alpha=0.2)
+face_open     = mcolors.to_rgba(colors_open,   alpha=0.4)
+face_closed   = mcolors.to_rgba(colors_closed, alpha=0.4)
 edge_open     = mcolors.to_rgba(colors_open,   alpha=1.0)
 edge_closed   = mcolors.to_rgba(colors_closed, alpha=1.0)
 
-### load data 
-avg_rgs = {}
-for mod in mods:
-    trial_means = [] 
-    for trial in trials:
-        Rg = np.load(f"raw_rg_data/Dsk2_{mod}_trial{trial}.npy")
-        mean_rg_tri = 10 * np.mean(Rg)
-        trial_means.append(mean_rg_tri)
-    
-    avg_rgs[mod] = np.mean(trial_means)
-
-mean_unbound = avg_rgs[mods[0]]
-mean_bound   = avg_rgs[mods[1]]
-
-# calc weights and errors 
 weights_open, weights_closed = [], []
-err_open_lo, err_open_hi     = [], []      
+err_open_lo, err_open_hi     = [], []
 
 for var_name, config in variants.items():
-    rg, err = config["exp_rg"], config["err"]
 
-    w_mid  = solve_weight(rg, mean_unbound, mean_bound)
-    w_hi   = solve_weight(rg + err, mean_unbound, mean_bound)
-    w_lo   = solve_weight(rg - err, mean_unbound, mean_bound)
 
-    #get percentage values 
-    wo = w_mid * 100
-    wc = (1 - w_mid) * 100
+    wo = float(config["weight_open"])
     weights_open.append(wo)
-    weights_closed.append(wc)
+    weights_closed.append(100.0 - wo)
+    err_open_lo.append(float(config.get("err_lo", 0.0)))
+    err_open_hi.append(float(config.get("err_hi", 0.0)))
+    continue                         
 
-
-    #get error of percentage 
-    err_open_lo.append(wo - (w_lo  * 100))
-    err_open_hi.append((w_hi * 100) - wo)   
-
-
-## Plotting arrea: 
 var_names = list(variants.keys())
 x         = np.arange(len(var_names))
 width     = 0.5
@@ -82,21 +58,19 @@ bars_open = ax.bar(x, weights_open, width, label="Open",
 bars_closed = ax.bar(x, weights_closed, width, bottom=weights_open, label="Closed",
                      facecolor=face_closed, edgecolor=edge_closed, linewidth=1.5)
 
-# Error bars on the boundary between open and closed (= top of open bar)
 ax.errorbar(x, weights_open,
             yerr=[err_open_lo, err_open_hi],
             fmt='none', color='k', capsize=5, capthick=1.25, linewidth=1.25,
             zorder=5)
 
-# Percentage labels
 for i in range(len(variants)):
     wo, wc = weights_open[i], weights_closed[i]
-
-    ax.text(x[i], wo / 2,      f"{wo:.0f}%", ha='center', va='center',
-            fontsize=12, color='white')
-
-    ax.text(x[i], wo + wc / 2, f"{wc:.0f}%", ha='center', va='center',
-            fontsize=12, color='white')
+    if wo > 6:
+        ax.text(x[i], wo / 2,      f"{wo:.0f}%", ha='center', va='center',
+                fontsize=10, color='k')
+    if wc > 6:
+        ax.text(x[i], wo + wc / 2, f"{wc:.0f}%", ha='center', va='center',
+                fontsize=10, color='k')
 
 ax.set_xticks(x)
 ax.set_xticklabels(var_names, fontsize=14)
@@ -105,7 +79,8 @@ ax.set_xlim(-0.5, len(var_names) - 0.5)
 ax.set_ylim(0, 102)
 ax.set_yticks([0, 25, 50, 75, 100])
 ax.tick_params(axis='y', labelsize=12)
+ax.legend(fontsize=10, loc='upper right')
 
 plt.tight_layout()
-plt.savefig('Fig1b.svg', dpi=300, bbox_inches='tight')
+plt.savefig('Fig2B.svg', dpi=300, bbox_inches='tight')
 plt.close()
